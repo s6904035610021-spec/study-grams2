@@ -264,4 +264,22 @@ input[type=range]:focus{box-shadow:none}
     width:100%;height:auto;
     display:flex;gap:4px;
     padding:6px 8px calc(6px + env(safe-area-inset-bottom));
-    background:rgba(255,255
+    background:rgba(255,255,255,.94);
+    -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+    border-right:0;border-top:1px solid var(--line);
+    z-index:9;
+  }
+  .logo{display:none}
+  nav button{flex-direction:column;gap:0;justify-content:center;text-align:center;font-size:.74rem;margin:0;padding:7px 2px}
+  main{padding:22px 16px 100px}
+  h1{font-size:1.5rem}
+  .grid{grid-template-columns:1fr}
+  .card{padding:20px}
+  .flip{height:220px}
+  .face{font-size:1.35rem;padding:22px}
+}
+
+/* ---------- ลดการเคลื่อนไหวสำหรับผู้ที่ตั้งค่าไว้ ---------- */
+@media(prefers-reduced-motion:reduce){
+  .fi,.orb,#arc,.btn,nav button,.mood,input,select,textarea{transition:none}
+}
