@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Flashcards + Calendar + Stress Tracker</title>
+<style>
+  body{font-family:system-ui,'Noto Sans Thai',sans-serif;max-width:900px;margin:auto;padding:16px;color:#1e1b4b}
+  [hidden]{display:none!important} /* จำเป็น: กัน CSS อื่นทับ attribute hidden */
+  section{border:1px solid #e3e5f5;border-radius:16px;padding:16px;margin-bottom:20px}
+  input,textarea,button{font:inherit;padding:8px 10px;border:1px solid #ccd;border-radius:8px;background:#fff}
+  /* Flashcard: คลาส .flipped ถูกสลับโดย JS บน #flashcard */
+  .flip-card{perspective:800px;height:180px;cursor:pointer;margin:12px 0}
+  .flip-inner{position:relative;height:100%;transition:transform .5s;transform-style:preserve-3d}
+  .flip-card.flipped .flip-inner{transform:rotateY(180deg)}
+  .face{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:16px;text-align:center;border-radius:14px;backface-visibility:hidden;font-size:1.3rem}
+  .front{background:#4f46e5;color:#fff}.back{background:#d9f7ea;transform:rotateY(180deg)}
+  /* Calendar */
+  .cal-weekdays,.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center}
+  .cal-cell{aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2px}
+  .cal-cell.empty{border:0;background:none}
+  .cal-cell.today{outline:2px solid #4f46e5}
+  .cal-cell.selected{background:#eef0ff}
+  .cal-cell.has-note .cal-day{text-decoration:underline}
+  .level-1{background:#d1fae5}.level-2{background:#ecfccb}.level-3{background:#fef3c7}.level-4{background:#fed7aa}.level-5{background:#fbcfe8}
+  .mood-btn[aria-pressed=true]{background:#4f46e5;color:#fff}
+</style>
+</head>
+<body>
+
+<!-- ===== 1) FLASHCARDS ===== -->
+<section>
+  <h2>แฟลชการ์ด</h2>
+  <form id="card-form">
+    <input id="card-question" placeholder="คำถาม" required>
+    <input id="card-answer" placeholder="คำตอบ" required>
+    <button type="submit">เพิ่มการ์ด</button>
+  </form>
+
+  <p id="card-empty">ยังไม่มีการ์ด เพิ่มใบแรกได้ที่ฟอร์มด้านบน</p>
+  <div id="card-viewer" hidden>
+    <div id="flashcard" class="flip-card" role="button" tabindex="0" aria-label="พลิกการ์ด">
+      <div class="flip-inner">
+        <div id="card-front" class="face front"></div>
+        <div id="card-back" class="face back"></div>
+      </div>
+    </div>
+    <button id="btn-prev" type="button">ย้อนกลับ</button>
+    <span id="card-counter"></span>
+    <button id="btn-next" type="button">ถัดไป</button>
+    <button id="btn-delete-card" type="button">ลบใบนี้</button>
+  </div>
+</section>
+
+<!-- ===== 2) CALENDAR ===== -->
+<section>
+  <h2>ปฏิทิน</h2>
+  <div>
+    <button id="btn-prev-month" type="button" aria-label="เดือนก่อนหน้า">‹</button>
+    <strong id="cal-title"></strong>
+    <button id="btn-next-month" type="button" aria-label="เดือนถัดไป">›</button>
+    <button id="btn-today" type="button">วันนี้</button>
+  </div>
+  <div class="cal-weekdays"><span>อา</span><span>จ</span><span>อ</span><span>พ</span><span>พฤ</span><span>ศ</span><span>ส</span></div>
+  <div id="cal-grid" class="cal-grid"></div>
+</section>
+
+<!-- ===== 3) STRESS TRACKER (ผูกกับวันที่เลือกในปฏิทิน) ===== -->
+<section>
+  <h2 id="selected-date-label"></h2>
+  <div id="stress-options"></div> <!-- JS สร้างปุ่มระดับ 1-5 ให้ -->
+  <p><textarea id="day-note" rows="3" maxlength="300" style="width:100%" placeholder="บันทึกประจำวัน"></textarea></p>
+  <button id="btn-save-day" type="button">บันทึก</button>
+  <button id="btn-clear-day" type="button">ลบบันทึกวันนี้</button>
+  <span id="save-msg" role="status"></span>
+
+  <h3>ประวัติล่าสุด</h3>
+  <p id="stress-summary"></p>
+  <ul id="stress-history"></ul>
+</section>
+
+<script src="script.js"></script>
+</body>
+</html>
